@@ -1,0 +1,30 @@
+# Build stage
+FROM quay.io/quarkus/ubi-quarkus-mandrel-builder-image:jdk-21 AS build
+
+
+WORKDIR /work/
+
+COPY --chown=1001:root .mvn/ .mvn/
+COPY --chown=1001:root mvnw .
+COPY --chown=1001:root pom.xml .
+
+RUN chmod +x mvnw
+
+RUN ./mvnw dependency:go-offline
+COPY --chown=1001:root src/ ./src/
+
+RUN ./mvnw package -Pnative -DskipTests
+
+# Run stage
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.10
+
+WORKDIR /work/
+COPY --from=build /work/target/*-runner /work/application
+
+RUN chmod +x /work/application
+
+EXPOSE 8080
+
+USER 1001
+
+ENTRYPOINT ["/work/application", "-Dquarkus.http.host=0.0.0.0"]

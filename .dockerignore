@@ -1,5 +1,12 @@
+# Ignore everything first
 *
+
+# Allow specific files and directories for Docker build
+!pom.xml
+!src/
 !target/*-runner
 !target/*-runner.jar
 !target/lib/*
 !target/quarkus-app/*
+!.mvn
+!mvnw
