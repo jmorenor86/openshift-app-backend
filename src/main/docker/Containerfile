@@ -23,6 +23,8 @@ COPY --from=build /work/target/*-runner /work/application
 
 RUN chmod +x /work/application
 
+COPY --from=build /work/target/*/META-INF/native-image/ /work/META-INF/native-image/
+
 EXPOSE 8080
 
 USER 1001
