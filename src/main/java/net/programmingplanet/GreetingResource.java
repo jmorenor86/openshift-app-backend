@@ -18,7 +18,20 @@ public class GreetingResource {
     public static class Message {
         public String message;
 
+        // Default constructor needed for Jackson serialization
+        public Message() {}
+
         public Message(String message) {
+            this.message = message;
+        }
+
+        // Optional: Add getter if needed for JSON serialization
+        public String getMessage() {
+            return message;
+        }
+
+        // Optional: Add setter if needed for JSON deserialization
+        public void setMessage(String message) {
             this.message = message;
         }
     }
